@@ -38,8 +38,6 @@ async function getEpisodes() {
 export default async function Home() {
   const series = await get()
   const episodes = await getEpisodes()
-  console.log(episodes.data.episodes);
-
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -47,35 +45,10 @@ export default async function Home() {
         width={300}
         src={series.data.image}
       />
-      <div className="w-screen overflow-x-scroll scrollbar-hide">
-        <ButtonGroup>
-          <Episode number={331} />
-          <Episode number={332} />
-          <Episode number={333} />
-          <Episode number={334} />
-          <Episode number={335} />
-          <Episode number={336} />
-          <Episode number={337} />
-          <Episode number={338} />
-          <Episode number={339} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-          <Episode number={340} />
-        </ButtonGroup>
+      <div className="mt-10 flex flex-row w-screen overflow-x-scroll scrollbar-hide">
+        {episodes.data.episodes.map((episode: any) => (
+          <Episode key={episode.id} number={episode.absoluteNumber} />
+        ))}
       </div>
 
     </section >
