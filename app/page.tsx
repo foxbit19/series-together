@@ -1,56 +1,83 @@
-import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code";
-import { button as buttonStyles } from "@nextui-org/theme";
+import { Image } from "@nextui-org/image";
+import Episode from "@/components/episode";
+import { ButtonGroup } from "@nextui-org/button";
+import { getAuthToken } from "@/api/apiProvider";
 
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+async function get() {
+  const res = await fetch('https://api4.thetvdb.com/v4/series/79824', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${await getAuthToken()}`
+    },
+  })
 
-export default function Home() {
+  if (!res.ok) {
+    throw new Error('Failed to fetch data: ' + `${res.status}`)
+  }
+
+  return await res.json()
+}
+
+async function getEpisodes() {
+  const res = await fetch('https://api4.thetvdb.com/v4/series/79824/episodes/official?page=0', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${await getAuthToken()}`
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch data: ' + `${res.status}`)
+  }
+
+  return await res.json()
+}
+
+export default async function Home() {
+  const series = await get()
+  const episodes = await getEpisodes()
+  console.log(episodes.data.episodes);
+
+
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-lg text-center justify-center">
-        <h1 className={title()}>Make&nbsp;</h1>
-        <h1 className={title({ color: "violet" })}>beautiful&nbsp;</h1>
-        <br />
-        <h1 className={title()}>
-          websites regardless of your design experience.
-        </h1>
-        <h2 className={subtitle({ class: "mt-4" })}>
-          Beautiful, fast and modern React UI library.
-        </h2>
+      <Image
+        width={300}
+        src={series.data.image}
+      />
+      <div className="w-screen overflow-x-scroll scrollbar-hide">
+        <ButtonGroup>
+          <Episode number={331} />
+          <Episode number={332} />
+          <Episode number={333} />
+          <Episode number={334} />
+          <Episode number={335} />
+          <Episode number={336} />
+          <Episode number={337} />
+          <Episode number={338} />
+          <Episode number={339} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+          <Episode number={340} />
+        </ButtonGroup>
       </div>
 
-      <div className="flex gap-3">
-        <Link
-          isExternal
-          className={buttonStyles({
-            color: "primary",
-            radius: "full",
-            variant: "shadow",
-          })}
-          href={siteConfig.links.docs}
-        >
-          Documentation
-        </Link>
-        <Link
-          isExternal
-          className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={siteConfig.links.github}
-        >
-          <GithubIcon size={20} />
-          GitHub
-        </Link>
-      </div>
-
-      <div className="mt-8">
-        <Snippet hideCopyButton hideSymbol variant="flat">
-          <span>
-            Get started by editing <Code color="primary">app/page.tsx</Code>
-          </span>
-        </Snippet>
-      </div>
-    </section>
+    </section >
   );
 }
